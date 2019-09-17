@@ -15,11 +15,30 @@ public class ContactHelper extends HelperBase {
   }
 
   public void fillForm(ContactData contactData) {
-    type(By.name("firstname"),contactData.getFirstname());
+    type(By.name("firstname"), contactData.getFirstname());
     type(By.name("lastname"), contactData.getLastname());
     type(By.name("address"), contactData.getAddress());
     type(By.name("mobile"), contactData.getPhone());
     type(By.name("email"), contactData.getEmail());
-}
+  }
 
+  public void editContact() {
+    click(By.xpath("(//img[@alt='Edit'])[2]"));
+  }
+
+  public void submitContactModification() {
+    click(By.xpath("(//input[@name='update'])[2]"));
+  }
+
+  public void selectContract() {
+    click(By.name("selected[]"));
+  }
+
+  public void deleteSelectedContacts() {
+    click(By.xpath("//input[@value='Delete']"));
+  }
+
+  public void submitDeletionContacts() {
+    wd.switchTo().alert().accept();
+  }
 }

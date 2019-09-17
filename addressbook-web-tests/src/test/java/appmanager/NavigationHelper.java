@@ -15,4 +15,12 @@ public class NavigationHelper extends HelperBase {
   public void gotoAddNew() {
     click(By.linkText("add new"));
   }
+
+  public void gotoHome() {
+    click(By.linkText("home"));
+  }
+  public void returnToHomePage() {
+    click(By.linkText("home page"));
+  }
 }
+
