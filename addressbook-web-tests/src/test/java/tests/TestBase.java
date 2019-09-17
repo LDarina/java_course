@@ -1,10 +1,12 @@
 package tests;
 
 import appmanager.ApplicationManager;
+import model.ContactData;
+import org.openqa.selenium.By;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class TestBase {
+public class TestBase extends ApplicationManager {
 
   protected final ApplicationManager app = new ApplicationManager();
 
