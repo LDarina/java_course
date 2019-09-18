@@ -23,7 +23,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public void editContact() {
-    click(By.xpath("(//img[@alt='Edit'])[2]"));
+    click(By.xpath("//img[@alt='Edit']"));
   }
 
   public void submitContactModification() {
