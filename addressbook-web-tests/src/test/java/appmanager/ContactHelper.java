@@ -2,7 +2,10 @@ package appmanager;
 
 import model.ContactData;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 public class ContactHelper extends HelperBase {
 
@@ -14,12 +17,18 @@ public class ContactHelper extends HelperBase {
     click(By.xpath("(//input[@name='submit'])[2]"));
   }
 
-  public void fillForm(ContactData contactData) {
+  public void fillForm(ContactData contactData, boolean creation) {
     type(By.name("firstname"), contactData.getFirstname());
     type(By.name("lastname"), contactData.getLastname());
     type(By.name("address"), contactData.getAddress());
     type(By.name("mobile"), contactData.getPhone());
     type(By.name("email"), contactData.getEmail());
+
+    if (creation) {
+      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+    } else  {
+      Assert.assertFalse(isElementPresent(By.name("new_group")));
+    }
   }
 
   public void editContact() {
