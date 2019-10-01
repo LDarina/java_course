@@ -1,7 +1,10 @@
 package tests;
 
 import model.ContactData;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 public class ContactDeletionTests extends TestBase{
 
@@ -11,9 +14,16 @@ public class ContactDeletionTests extends TestBase{
     if (! app.getContactHelper().isThereAContact()) {
       app.getContactHelper().createContact(new ContactData("first_name", "last_name","SPb", "79998887766", "name@mail.ru", "test1"), true);
     }
-    app.getContactHelper().selectContract();
+    List<ContactData> before = app.getContactHelper().getContactList();
+    app.getContactHelper().selectContract(before.size() - 1);
     app.getContactHelper().deleteSelectedContacts();
     app.getContactHelper().submitDeletionContacts();
+    app.getNavigationHelper().gotoHome();
+    List<ContactData> after = app.getContactHelper().getContactList();
+    Assert.assertEquals(after.size(), before.size() - 1);
+
+    before.remove(before.size() - 1);
+    Assert.assertEquals(before, after);
   }
 
 }
