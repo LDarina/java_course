@@ -1,11 +1,9 @@
 package appmanager;
 
-import com.sun.javafx.binding.ExpressionHelperBase;
 import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +33,8 @@ public class GroupHelper extends HelperBase {
     click(By.name("new"));
   }
 
+
+
   public void deleteSelectedGroups() {
     click(By.name("delete"));
   }
@@ -51,10 +51,22 @@ public class GroupHelper extends HelperBase {
     click(By.name("update"));
   }
 
-  public void createGroup(GroupData group) {
+  public void create(GroupData group) {
     initGroupCreation();
     fillGroupForm(group);
     submitGroupCreation();
+    returnToGroupPage();
+  }
+  public void modify(int index, GroupData group) {
+    selectGroup(index);
+    initGroupModification();
+    fillGroupForm(group);
+    submitGroupModification();
+    returnToGroupPage();
+  }
+  public void delete(int index) {
+    selectGroup(index);
+    deleteSelectedGroups();
     returnToGroupPage();
   }
 
@@ -66,14 +78,13 @@ public class GroupHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();
   }
 
-  public List<GroupData> getGroupList() {
+  public List<GroupData> list() {
     List<GroupData> groups = new ArrayList<GroupData>();
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
     for (WebElement element : elements) {
       String name = element.getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-      GroupData group = new GroupData(id, name, null, null);
-      groups.add(group);
+      groups.add(new GroupData().withId(id).withName(name));
     }
     return groups;
   }

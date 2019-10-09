@@ -5,14 +5,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 public class ContactModificationTests extends TestBase {
 
-  @Test(enabled = false)
+  @Test
   public void testContactModification() {
-    app.getNavigationHelper().gotoHome();
+    app.goTo().gotoHome();
     if (! app.getContactHelper().isThereAContact()) {
       app.getContactHelper().createContact(new ContactData("first_name", "last_name","SPb", "79998887766", "name@mail.ru", "test1"), true);
     }
