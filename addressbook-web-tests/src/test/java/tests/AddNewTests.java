@@ -5,21 +5,21 @@ import org.testng.annotations.*;
 import model.ContactData;
 
 import java.util.Comparator;
-import java.util.HashSet;
+
 import java.util.List;
 
 public class AddNewTests extends TestBase {
 
   @Test
   public void testAddNewTests() throws Exception {
-    List<ContactData> before = app.getContactHelper().getContactList();
-    app.getContactHelper().gotoAddNew();
-    ContactData contact = new ContactData("first_name", "last_name","SPb", "79998887766", "name@mail.ru", "test1");
-    app.getContactHelper().createContact((contact), true);
-    List<ContactData> after = app.getContactHelper().getContactList();
+    List<ContactData> before = app.contact().list();
+    app.contact().gotoAddNew();
+    ContactData contact = new ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("79998887766").withEmail("name@mail.ru").withGroup("test1");
+    app.contact().create((contact), true);
+    List<ContactData> after = app.contact().list();
     Assert.assertEquals(after.size(), before.size() + 1);
 
-    contact.setId(after.stream().max(Comparator.comparingInt(ContactData::getId)).get().getId());
+    contact.withId(after.stream().max(Comparator.comparingInt(ContactData::getId)).get().getId());
     before.add(contact);
     Comparator<? super ContactData> byId = (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
     before.sort(byId);

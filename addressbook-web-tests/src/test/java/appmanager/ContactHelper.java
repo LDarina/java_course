@@ -60,15 +60,28 @@ public class ContactHelper extends HelperBase {
     wd.findElement(By.cssSelector("div.msgbox"));
   }
 
+
   public void returnToHomePage() {
     click(By.linkText("home page"));
   }
 
-  public void createContact(ContactData contact, boolean creation) {
+  public void create(ContactData contact, boolean creation) {
     gotoAddNew();
     fillForm(contact, creation);
     submitCreation();
     returnToHomePage();
+  }
+  public void modify(int index, ContactData contact) {
+    editContact(index);
+    fillForm((contact), false);
+    submitContactModification();
+    returnToHomePage();
+  }
+
+  public void delete(int index) {
+    selectContract(index);
+    deleteSelectedContacts();
+    submitDeletionContacts();
   }
 
   public boolean isThereAContact() {
@@ -79,7 +92,7 @@ public class ContactHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();
   }
 
-  public List<ContactData> getContactList() {
+  public List<ContactData> list() {
     List<ContactData> contacts = new ArrayList<ContactData>();
     List<WebElement> elements = wd.findElements(By.xpath("//tr[@name= 'entry']"));
     for (WebElement element : elements) {
@@ -89,8 +102,7 @@ public class ContactHelper extends HelperBase {
         String address = cells.get(3).getText();
         String phone = cells.get(5).getText();
         int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("id"));
-        ContactData contact = new ContactData(id, firstname, lastname, address, phone, null, null);
-        contacts.add(contact);
+        contacts.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address).withPhone(phone));
       }
     return contacts;
   }
