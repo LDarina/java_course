@@ -15,6 +15,7 @@ public class ContactData {
   public int getId() {
     return id;
   }
+
   public String getAddress() {
     return address;
   }
@@ -44,15 +45,14 @@ public class ContactData {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ContactData that = (ContactData) o;
-    return Objects.equals(address, that.address) &&
-            Objects.equals(phone, that.phone) &&
+    return id == that.id &&
             Objects.equals(firstname, that.firstname) &&
             Objects.equals(lastname, that.lastname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(address, phone, firstname, lastname);
+    return Objects.hash(id, firstname, lastname);
   }
 
   @Override

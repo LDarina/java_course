@@ -1,6 +1,7 @@
 package appmanager;
 
 import model.GroupData;
+import model.Groups;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,7 +27,6 @@ public class GroupHelper extends HelperBase {
     type(By.name("group_name"), groupData.getName());
     type(By.name("group_header"), groupData.getHeader());
     type(By.name("group_footer"), groupData.getFooter());
-
   }
 
   public void initGroupCreation() {
@@ -85,8 +85,8 @@ public class GroupHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();
   }
 
-   public Set<GroupData> all() {
-    Set<GroupData> groups = new HashSet<>();
+   public Groups all() {
+    Groups groups = new Groups();
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
     for (WebElement element : elements) {
       String name = element.getText();
