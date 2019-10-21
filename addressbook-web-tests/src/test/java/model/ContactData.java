@@ -1,22 +1,31 @@
 package model;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.File;
 import java.util.Objects;
 
 public class ContactData {
   private int id = Integer.MAX_VALUE;;
+  @Expose
   private String firstname;
+  @Expose
   private String lastname;
+  @Expose
   private String address;
   private String homephone;
   private String workphone;
+  @Expose
   private String phone;
   private String allPhones;
+  @Expose
   private String email;
   private String email2;
   private String email3;
   private String allEmails;
+  @Expose
   private String group;
+
   private File photo;
 
   public File getPhoto() { return photo; }
