@@ -47,19 +47,19 @@ public class ContactDataGenerator {
     }
   }
   private void saveAsCSV(List<ContactData> contacts, File file) throws IOException {
-    Writer writer = new FileWriter(file);
-    for (ContactData contact : contacts) {
-      writer.write(String.format("%s;%s;%s;%s;%s\n", contact.getLastname(), contact.getFirstname(),
-              contact.getPhone(), contact.getAddress(), contact.getEmail(), contact.getGroup()));
+    try(Writer writer = new FileWriter(file)){
+      for (ContactData contact : contacts) {
+        writer.write(String.format("%s;%s;%s;%s;%s\n", contact.getLastname(), contact.getFirstname(),
+                contact.getPhone(), contact.getAddress(), contact.getEmail(), contact.getGroup()));
+      }
     }
-    writer.close();
   }
   private void saveAsJson(List<ContactData> contacts, File file) throws IOException {
     Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
     String json = gson.toJson(contacts);
-    Writer writer = new FileWriter(file);
-    writer.write(json);
-    writer.close();
+    try(Writer writer = new FileWriter(file)) {
+      writer.write(json);
+    }
   }
 
   private List<ContactData> generateContacts(int count) {
