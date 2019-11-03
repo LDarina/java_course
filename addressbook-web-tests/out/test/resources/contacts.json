@@ -3,24 +3,36 @@
     "firstname": "firstname 0",
     "lastname": "lastname 0",
     "address": "Spb 0",
+    "homephone": "812 0",
+    "workphone": "911 0",
     "phone": "02 0",
     "email": "email@mail.ru 0",
+    "email2": "email2@mail.ru 0",
+    "email3": "email3@mail.ru 0",
     "group": "test 1"
   },
   {
     "firstname": "firstname 1",
     "lastname": "lastname 1",
     "address": "Spb 1",
+    "homephone": "812 1",
+    "workphone": "911 1",
     "phone": "02 1",
     "email": "email@mail.ru 1",
+    "email2": "email2@mail.ru 1",
+    "email3": "email3@mail.ru 1",
     "group": "test 1"
   },
   {
     "firstname": "firstname 2",
     "lastname": "lastname 2",
     "address": "Spb 2",
+    "homephone": "812 2",
+    "workphone": "911 2",
     "phone": "02 2",
     "email": "email@mail.ru 2",
+    "email2": "email2@mail.ru 2",
+    "email3": "email3@mail.ru 2",
     "group": "test 1"
   }
 ]

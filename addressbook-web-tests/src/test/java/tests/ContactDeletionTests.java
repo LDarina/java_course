@@ -18,21 +18,26 @@ import static org.testng.Assert.assertEquals;
 public class ContactDeletionTests extends TestBase{
   @BeforeMethod
   public void ensurePreconditions() {
-    app.goTo().gotoHome();
-    if (app.contact().all().size() == 0) {
-      app.contact().create(new ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("79998887766").withEmail("name@mail.ru").withGroup("test1"), true);
+    if (app.db().contacts().size() == 0) {
+      app.goTo().gotoHome();
+      app.contact().create(new ContactData()
+              .withFirstname("first_name")
+              .withLastname("last_name")
+              .withAddress("SPb")
+              .withPhone("79998887766")
+              .withEmail("name@mail.ru")
+              .withGroup("test1"), true);
     }
   }
 
   @Test
   public void testContactDeletion() {
-    Contacts before = app.contact().all();
+    Contacts before = app.db().contacts();
     ContactData deletedContact = before.iterator().next();
     app.contact().delete(deletedContact);
     app.goTo().gotoHome();
-    Contacts after = app.contact().all();
+    Contacts after = app.db().contacts();
     assertEquals(after.size(), before.size() - 1);
-
     assertThat(after, equalTo(before.withOut(deletedContact)));
 
   }
