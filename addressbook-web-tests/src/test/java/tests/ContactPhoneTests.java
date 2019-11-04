@@ -24,7 +24,7 @@ public class ContactPhoneTests extends TestBase {
               .withAddress("SPb")
               .withPhone("79998887766")
               .withEmail("name@mail.ru")
-              .withGroup("test1"), true);
+              , true);
     }
   }
 

@@ -35,12 +35,15 @@ public class ContactHelper extends HelperBase {
     type(By.name("email"), contactData.getEmail());
     type(By.name("email2"), contactData.getEmail2());
     type(By.name("email3"), contactData.getEmail3());
-   // attach(By.name("photo"), contactData.getPhoto());
+    // attach(By.name("photo"), contactData.getPhoto());
 
     if (creation) {
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-    } else  {
-      Assert.assertFalse(isElementPresent(By.name("new_group")));
+      if (contactData.getGroups().size() > 0) {
+        Assert.assertTrue(contactData.getGroups().size() == 1);
+        new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      } else {
+        Assert.assertFalse(isElementPresent(By.name("new_group")));
+      }
     }
   }
   public void gotoAddNew() {
@@ -155,5 +158,32 @@ public class ContactHelper extends HelperBase {
             .withEmail(email)
             .withEmail2(email2)
             .withEmail3(email3);
+  }
+
+  private void addSelectedContactToGroup() {
+    click(By.name("add"));
+  }
+
+  private void selectGroupForAdd(String group) {
+    new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group);
+  }
+
+  public void addToGroup(ContactData contact, GroupData group) {
+    selectContractById(contact.getId());
+    selectGroupForAdd(group.getName());
+    addSelectedContactToGroup();
+  }
+
+  private void removeFromGroup() {
+    wd.findElement(By.name("remove")).click();
+  }
+
+  public void removeContactFromGroup(ContactData contact, GroupData group) {
+    selectGroupForRemove(group.getName());
+    selectContractById(contact.getId());
+    removeFromGroup();
+  }
+  private void selectGroupForRemove(String group) {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText(group);
   }
 }
