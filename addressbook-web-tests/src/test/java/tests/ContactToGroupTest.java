@@ -11,7 +11,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static tests.TestBase.app;
 
-public class ContactToGroupTest {
+public class ContactToGroupTest extends TestBase {
 
   private ContactData chosenContact;
   private GroupData chosenGroup;
