@@ -42,6 +42,19 @@ public class ContactOutOfGroup extends TestBase {
     }
    else
     {
+      Contacts contacts = app.db().contacts();
+      for (ContactData contact : contacts) {
+        if (contact.getGroups().size() == 0) {
+          contactForDel = contact;
+        }
+      }
+
+      Groups groupsAll = app.db().groups();
+      for (GroupData group : groupsAll) {
+        if (group.getContacts().size() == 0) {
+          groupForDel = group;
+        }
+      }
       app.goTo().gotoHome();
       app.contact().addToGroup(contactForDel, groupForDel);
 

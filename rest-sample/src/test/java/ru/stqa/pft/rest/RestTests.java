@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.apache.http.client.fluent.Executor;
+
 import org.apache.http.client.fluent.Request;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -24,11 +25,17 @@ public class RestTests extends TestBase {
     int issueId = createIssue(newIssue);
     Set<Issue> newIssues = getIssues();
     oldIssues.add(newIssue.withId(issueId));
-    assertEquals(newIssues, oldIssues);
+    Assert.assertEquals(newIssues, oldIssues);
+  }
+
+  @Test
+  public void testIssueStatus() throws IOException {
+    int issueID = 2000;
+    skipIfNotFixed(issueID);
   }
 
   private Set<Issue> getIssues() throws IOException {
-    String json = getExecutor().execute(Request.Get("https://bugify.stqa.ru/api/issues.json"))
+    String json = getExecutor().execute(Request.Get("https://bugify.stqa.ru/api/issues.json?page=1&limit=1000"))
             .returnContent().asString();
     JsonElement parsed = JsonParser.parseString(json);
     JsonElement issues = parsed.getAsJsonObject().get("issues");
@@ -36,7 +43,7 @@ public class RestTests extends TestBase {
   }
 
   private int createIssue(Issue newIssue) throws IOException {
-    String json = getExecutor().execute(Request.Post("https://bugify.stqa.ru/api/issues.json")
+    String json = getExecutor().execute(Request.Post("https://bugify.stqa.ru/api/issues.json?page=1&limit=1000")
             .bodyForm(new BasicNameValuePair("subject", newIssue.getSubject()),
                     new BasicNameValuePair("description", newIssue.getDiscription())))
             .returnContent().asString();
