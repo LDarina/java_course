@@ -13,10 +13,6 @@ import static tests.TestBase.app;
 
 public class ContactToGroupTest extends TestBase {
 
-  private ContactData chosenContact;
-  private GroupData chosenGroup;
-
-
   @BeforeMethod
   public void ensurePreconditions() {
     if (app.db().contacts().size() == 0) {
@@ -30,24 +26,29 @@ public class ContactToGroupTest extends TestBase {
   }
 
   @Test
-  public void TestContactToGroup() {
-    Contacts contacts = app.db().contacts();
-    for (ContactData contact : contacts) {
-      if (contact.getGroups().size() == 0) {
-        chosenContact = contact;
-      }
-    }
+  public void testContactToGroup() {
     Groups groups = app.db().groups();
-    for (GroupData group : groups) {
-      if (group.getContacts().size() == 0) {
-        chosenGroup = group;
-      }
+    GroupData group = groups.iterator().next();
+    Contacts before = app.db().contacts();
 
-      app.goTo().gotoHome();
-      Groups before = chosenContact.getGroups();
-      app.contact().addToGroup(chosenContact, chosenGroup);
-      ContactData contactFromDb = app.db().getContactById(chosenContact.getId());
-      assertThat(contactFromDb.getGroups(), equalTo(before.withAdded(chosenGroup)));
+    ContactData contactAdd = contactForAdd(before);
+
+    app.goTo().gotoHome();
+    app.contact().addToGroup(contactAdd, group);
+    app.goTo().selectedGroupPage(group);
+
+    assertThat(contactAdd.getGroups().withAdded(group), equalTo(app.db().getContactByID(contactAdd.getId()).getGroups()));
+  }
+
+  private ContactData contactForAdd(Contacts before) {
+    for (ContactData contact : before) {
+      if (contact.getGroups().size() == 0) {
+        return contact;
+      }
     }
+    app.contact().create(new  ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("02").withEmail("email@mail.ru"), true);
+    Contacts newContact = app.db().contacts();
+    return newContact.iterator().next();
   }
 }
+

@@ -1,5 +1,6 @@
 package appmanager;
 
+import model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -25,5 +26,9 @@ public class NavigationHelper extends HelperBase {
       return;
     }
     click(By.linkText("home"));
+  }
+
+  public void selectedGroupPage(GroupData group) {
+    wd.findElement(By.xpath("//a[contains(., 'group page')]")).click();
   }
 }

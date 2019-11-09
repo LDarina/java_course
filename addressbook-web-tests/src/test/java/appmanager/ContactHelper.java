@@ -183,7 +183,9 @@ public class ContactHelper extends HelperBase {
     selectContractById(contact.getId());
     removeFromGroup();
   }
-  private void selectGroupForRemove(String group) {
+  public void selectGroupForRemove(String group) {
     new Select(wd.findElement(By.name("group"))).selectByVisibleText(group);
   }
+
+
 }
