@@ -28,22 +28,25 @@ public class ContactOutOfGroup extends TestBase {
 
     Groups groups = app.db().groups();
     if (groups.stream().noneMatch(group -> group.getContacts().size() > 0)) {
-      for (GroupData group : groups) {
-        if (group.getContacts().size() > 0) {
-          groupForDel = group;
-        }
-      }
       Contacts contacts = app.db().contacts();
       for (ContactData contact : contacts) {
         if (contact.getGroups().contains(groups)) {
           contactForDel = contact;
         }
       }
+      for (GroupData group : groups) {
+        if (group.getContacts().size() > 0) {
+          groupForDel = group;
+        }
+      }
+    }
+   else
+    {
       app.goTo().gotoHome();
       app.contact().addToGroup(contactForDel, groupForDel);
+
     }
   }
-
 
   @Test
   public void testContactOutOfGroup() {
