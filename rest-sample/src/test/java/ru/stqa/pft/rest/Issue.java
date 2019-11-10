@@ -40,8 +40,8 @@ public class Issue {
     if (o == null || getClass() != o.getClass()) return false;
     Issue issue = (Issue) o;
     return id == issue.id &&
-            Objects.equals(subject, issue.subject) &&
-            Objects.equals(discription, issue.discription);
+            subject.equals(issue.subject) &&
+            discription.equals(issue.discription);
   }
 
   @Override
