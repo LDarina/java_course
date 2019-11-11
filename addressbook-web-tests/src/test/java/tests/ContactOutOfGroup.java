@@ -44,14 +44,14 @@ public class ContactOutOfGroup extends TestBase {
     {
       Contacts contacts = app.db().contacts();
       for (ContactData contact : contacts) {
-        if (contact.getGroups().size() == 0) {
+        if (contact.getGroups().size() < 1) {
           contactForDel = contact;
         }
       }
 
       Groups groupsAll = app.db().groups();
       for (GroupData group : groupsAll) {
-        if (group.getContacts().size() == 0) {
+        if (group.getContacts().size() < 1) {
           groupForDel = group;
         }
       }

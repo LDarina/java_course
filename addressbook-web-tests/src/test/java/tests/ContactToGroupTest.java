@@ -13,6 +13,8 @@ import static tests.TestBase.app;
 
 public class ContactToGroupTest extends TestBase {
 
+  private ContactData contactForAdd;
+
   @BeforeMethod
   public void ensurePreconditions() {
     if (app.db().contacts().size() == 0) {
@@ -23,32 +25,31 @@ public class ContactToGroupTest extends TestBase {
       app.goTo().groupPage();
       app.group().create(new GroupData().withName("test1"));
     }
+    Contacts contacts = app.db().contacts();
+    if (contacts.stream().noneMatch(contact -> contact.getGroups().size() < 1)) {
+        app.goTo().gotoHome();
+        app.contact().create(new ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("02").withEmail("email@mail.ru"), true);
+      }
   }
+
 
   @Test
   public void testContactToGroup() {
-    Groups groups = app.db().groups();
-    GroupData group = groups.iterator().next();
-    Contacts before = app.db().contacts();
-
-    ContactData contactAdd = contactForAdd(before);
-
-    app.goTo().gotoHome();
-    app.contact().addToGroup(contactAdd, group);
-    app.goTo().selectedGroupPage(group);
-
-    assertThat(contactAdd.getGroups().withAdded(group), equalTo(app.db().getContactByID(contactAdd.getId()).getGroups()));
-  }
-
-  private ContactData contactForAdd(Contacts before) {
-    for (ContactData contact : before) {
-      if (contact.getGroups().size() == 0) {
-        return contact;
+    Contacts contacts = app.db().contacts();
+    for (ContactData contact : contacts) {
+      if (contact.getGroups().size() < 1) {
+        contactForAdd = contact;
       }
     }
-    app.contact().create(new  ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("02").withEmail("email@mail.ru"), true);
-    Contacts newContact = app.db().contacts();
-    return newContact.iterator().next();
-  }
-}
+    Groups groups = app.db().groups();
+    GroupData group = groups.iterator().next();
 
+    app.goTo().gotoHome();
+    app.contact().addToGroup(contactForAdd, group);
+    app.goTo().selectedGroupPage(group);
+
+    assertThat(contactForAdd.getGroups().withAdded(group), equalTo(app.db().getContactByID(contactForAdd.getId()).getGroups()));
+  }
+
+
+}
