@@ -5,7 +5,8 @@ import java.util.Objects;
 public class Issue {
    private int id;
    private String subject;
-   private String discription;
+   private String description;
+
 
   public int getId() {
     return id;
@@ -25,12 +26,12 @@ public class Issue {
     return this;
   }
 
-  public String getDiscription() {
-    return discription;
+  public String getDescription() {
+    return description;
   }
 
-  public Issue withDiscription(String discription) {
-    this.discription = discription;
+  public Issue withDescription(String description) {
+    this.description = description;
     return this;
   }
 
@@ -40,21 +41,23 @@ public class Issue {
     if (o == null || getClass() != o.getClass()) return false;
     Issue issue = (Issue) o;
     return id == issue.id &&
-            subject.equals(issue.subject) &&
-            discription.equals(issue.discription);
+            Objects.equals(subject, issue.subject) &&
+            Objects.equals(description, issue.description);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, subject, discription);
+    return Objects.hash(id, subject, description);
   }
 
   @Override
   public String toString() {
     return "Issue{" +
             "subject='" + subject + '\'' +
-            ", discription='" + discription + '\'' +
+            ", description='" + description + '\'' +
             '}';
   }
+
+
 }
 

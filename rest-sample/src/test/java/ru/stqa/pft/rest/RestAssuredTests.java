@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
 
-public class RestAssuredTests {
+public class RestAssuredTests  extends TestBase{
 
   @BeforeClass
   public void init() {
@@ -25,25 +25,30 @@ public class RestAssuredTests {
   @Test
   public  void testCreateIssue() throws IOException {
     Set<Issue> oldIssues = getIssues();
-    Issue newIssue = new Issue().withSubject("My Test issue").withDiscription("New test issue");
+    Issue newIssue = new Issue().withSubject("My Test issue").withDescription("New test issue");
     int issueId = createIssue(newIssue);
     Set<Issue> newIssues = getIssues();
     oldIssues.add(newIssue.withId(issueId));
     assertEquals(newIssues, oldIssues);
 
   }
+  @Test
+  public void testIssueStatus() throws IOException {
+    int issueID = 2052;
+    skipIfNotFixed(issueID);
+  }
 
   private int createIssue(Issue newIssue) throws IOException {
     String json = RestAssured.given()
             .parameter("subject", newIssue.getSubject())
-            .parameter("description", newIssue.getDiscription())
-            .post("https://bugify.stqa.ru/api/issues.json").asString();
+            .parameter("description", newIssue.getDescription())
+            .post("https://bugify.stqa.ru/api/issues.json?page=1&limit=1000").asString();
     JsonElement parsed = JsonParser.parseString(json);
     return parsed.getAsJsonObject().get("issue_id").getAsInt();
   }
 
   private Set<Issue> getIssues() throws IOException {
-    String json = RestAssured.get("https://bugify.stqa.ru/api/issues.json").asString();
+    String json = RestAssured.get("https://bugify.stqa.ru/api/issues.json?page=1&limit=1000").asString();
     JsonElement parsed = JsonParser.parseString(json);
     JsonElement issues = parsed.getAsJsonObject().get("issues");
     return new Gson().fromJson(issues, new TypeToken<Set<Issue>>(){}.getType());

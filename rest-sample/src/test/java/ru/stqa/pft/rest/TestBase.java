@@ -17,9 +17,13 @@ public class TestBase {
     JsonElement parsed = JsonParser.parseString(json);
     JsonObject parsedObject = parsed.getAsJsonObject();
     String issueStatus = parsedObject.get("issues").getAsJsonArray().get(0).getAsJsonObject().get("state_name").toString();
-    if (issueStatus.equals("Resolved")) return false;
-    else return true;
+
+    if (!issueStatus.equals("Closed")) {
+      return true;
+    }
+    return false;
   }
+
 
   public Executor getExecutor() {
     return Executor.newInstance().auth("288f44776e7bec4bf44fdfeb1e646490", "");

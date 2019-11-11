@@ -5,8 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import com.jayway.restassured.RestAssured;
 import org.apache.http.client.fluent.Request;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -18,24 +20,26 @@ import static org.testng.Assert.assertEquals;
 
 public class RestTests extends TestBase {
 
+
   @Test
   public  void testCreateIssue() throws IOException {
     Set<Issue> oldIssues = getIssues();
-    Issue newIssue = new Issue().withSubject("My Test issue").withDiscription("New test issue");
+    Issue newIssue = new Issue().withSubject("My Test issue").withDescription("New test issue");
     int issueId = createIssue(newIssue);
     Set<Issue> newIssues = getIssues();
     oldIssues.add(newIssue.withId(issueId));
-    Assert.assertEquals(newIssues, oldIssues);
+    assertEquals(newIssues, oldIssues);
   }
 
   @Test
   public void testIssueStatus() throws IOException {
-    int issueID = 2000;
+    int issueID = 2044;
     skipIfNotFixed(issueID);
   }
 
+
   private Set<Issue> getIssues() throws IOException {
-    String json = getExecutor().execute(Request.Get("https://bugify.stqa.ru/api/issues.json"))
+    String json = getExecutor().execute(Request.Get("https://bugify.stqa.ru/api/issues.json?page=1&limit=100"))
             .returnContent().asString();
     JsonElement parsed = JsonParser.parseString(json);
     JsonElement issues = parsed.getAsJsonObject().get("issues");
@@ -43,14 +47,11 @@ public class RestTests extends TestBase {
   }
 
   private int createIssue(Issue newIssue) throws IOException {
-    String json = getExecutor().execute(Request.Post("https://bugify.stqa.ru/api/issues.json")
+    String json = getExecutor().execute(Request.Post("https://bugify.stqa.ru/api/issues.json?page=1&limit=100")
             .bodyForm(new BasicNameValuePair("subject", newIssue.getSubject()),
-                      new BasicNameValuePair("description", newIssue.getDiscription())))
+                      new BasicNameValuePair("description", newIssue.getDescription())))
             .returnContent().asString();
     JsonElement parsed = JsonParser.parseString(json);
     return parsed.getAsJsonObject().get("issue_id").getAsInt();
-
     }
-
-
 }
