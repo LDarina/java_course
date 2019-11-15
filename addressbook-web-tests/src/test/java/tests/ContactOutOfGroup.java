@@ -15,6 +15,7 @@ public class ContactOutOfGroup extends TestBase {
   private GroupData groupForDel;
   private ContactData contactForDel;
 
+
   @BeforeMethod
   public void ensurePreconditions() {
     if (app.db().contacts().size() == 0) {
@@ -26,51 +27,45 @@ public class ContactOutOfGroup extends TestBase {
       app.group().create(new GroupData().withName("test1"));
     }
 
-    Groups groups = app.db().groups();
+   Groups groups = app.db().groups();
     if (groups.stream().noneMatch(group -> group.getContacts().size() > 0)) {
       Contacts contacts = app.db().contacts();
       for (ContactData contact : contacts) {
-        if (contact.getGroups().contains(groups)) {
+        if (contact.getGroups().size() == 0) {
           contactForDel = contact;
         }
       }
-      for (GroupData group : groups) {
-        if (group.getContacts().size() > 0) {
-          groupForDel = group;
-        }
-      }
-    }
-   else
-    {
-      Contacts contacts = app.db().contacts();
-      for (ContactData contact : contacts) {
-        if (contact.getGroups().size() < 1) {
-          contactForDel = contact;
-        }
-      }
-
       Groups groupsAll = app.db().groups();
       for (GroupData group : groupsAll) {
-        if (group.getContacts().size() < 1) {
+        if (group.getContacts().size() == 0) {
           groupForDel = group;
         }
       }
       app.goTo().gotoHome();
       app.contact().addToGroup(contactForDel, groupForDel);
-
+    } else {
+    Contacts contacts = app.db().contacts();
+    for (ContactData contact : contacts) {
+      if (contact.getGroups().size() > 0) {
+        contactForDel = contact;
+      }
+    }
+    Groups contactGroups = contactForDel.getGroups();
+    for (GroupData delGroup : contactGroups) {
+      groupForDel = delGroup; }
     }
   }
 
-  @Test
-  public void testContactOutOfGroup() {
-    Groups before = contactForDel.getGroups();
-    app.goTo().gotoHome();
-    app.contact().removeContactFromGroup(contactForDel, groupForDel);
-    ContactData contactFromDB = app.db().getContactByID(contactForDel.getId());
-    assertThat(contactFromDB.getGroups(), equalTo(before.withOut(groupForDel)));
+    @Test
+    public void testContactOutOfGroup () {
+      Groups contactGroups = contactForDel.getGroups();
+      app.goTo().gotoHome();
+      app.contact().removeContactFromGroup(contactForDel, groupForDel);
+      ContactData contactFromDB = app.db().getContactByID(contactForDel.getId());
+      assertThat(contactFromDB.getGroups(), equalTo(contactGroups.withOut(groupForDel)));
 
+    }
   }
-}
 
 
 

@@ -67,7 +67,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public void selectContractById(int id) {
-    wd.findElement(By.cssSelector("input[value='" + id + "'")).click();
+    wd.findElement(By.xpath("//td[@class='center']/input[@value='"+ id +"']")).click();
   }
 
   public void deleteSelectedContacts() {

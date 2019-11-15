@@ -7,9 +7,9 @@
             <class name="tests.AddNewTests"/>
             <class name="tests.ContactModificationTests"/>
             <class name="tests.ContactDeletionTests"/>
-            <class name="tests.ContactPhoneTests"/>
-            <class name="tests.ContactAddressTests"/>
-            <class name="tests.ContactEmailTests"/>
+            <class name="tests.ContactToGroupTest"/>
+            <class name="tests.ContactOutOfGroup"/>
+
         </classes>
     </test>
 </suite>

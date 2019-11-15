@@ -14,6 +14,7 @@ import static tests.TestBase.app;
 public class ContactToGroupTest extends TestBase {
 
   private ContactData contactForAdd;
+  private GroupData groupForAdd;
 
   @BeforeMethod
   public void ensurePreconditions() {
@@ -25,31 +26,34 @@ public class ContactToGroupTest extends TestBase {
       app.goTo().groupPage();
       app.group().create(new GroupData().withName("test1"));
     }
-    Contacts contacts = app.db().contacts();
-    if (contacts.stream().noneMatch(contact -> contact.getGroups().size() < 1)) {
-        app.goTo().gotoHome();
-        app.contact().create(new ContactData().withFirstname("first_name").withLastname("last_name").withAddress("SPb").withPhone("02").withEmail("email@mail.ru"), true);
-      }
   }
 
 
   @Test
   public void testContactToGroup() {
     Contacts contacts = app.db().contacts();
+    Groups groups = new Groups();
     for (ContactData contact : contacts) {
-      if (contact.getGroups().size() < 1) {
+      groups = app.db().groups();
+      int countGroup = groups.size();
+      if (contact.getGroups().size() < countGroup) {
         contactForAdd = contact;
+        break;
       }
     }
-    Groups groups = app.db().groups();
-    GroupData group = groups.iterator().next();
-
+      Groups contactGroups = contactForAdd.getGroups();
+      for (GroupData group : groups) {
+       { if (!contactGroups.contains(group)) {
+         groupForAdd = group;
+         break;
+            }
+        }
+      }
     app.goTo().gotoHome();
-    app.contact().addToGroup(contactForAdd, group);
-    app.goTo().selectedGroupPage(group);
+    app.contact().addToGroup(contactForAdd, groupForAdd);
+    app.goTo().selectedGroupPage(groupForAdd);
 
-    assertThat(contactForAdd.getGroups().withAdded(group), equalTo(app.db().getContactByID(contactForAdd.getId()).getGroups()));
-  }
-
+    assertThat(contactForAdd.getGroups().withAdded(groupForAdd), equalTo(app.db().getContactByID(contactForAdd.getId()).getGroups()));
+ }
 
 }

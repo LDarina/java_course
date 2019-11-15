@@ -4,7 +4,10 @@
     <test name="Groups" >
         <classes>
 
+
             <class name="tests.GroupModificationTests" />
+
+
 
         </classes>
     </test>
